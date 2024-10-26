@@ -39,5 +39,5 @@ public abstract class TemporalEntity : MonoBehaviour
     }
     
     protected abstract void AddToQueues();
-    protected abstract void ReversePositionQueue(float amount);
+    protected abstract List<Queue> ReversePositionQueue(float amount);
 }

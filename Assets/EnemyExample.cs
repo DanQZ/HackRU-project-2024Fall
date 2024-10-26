@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class EnemyExample : TemporalEntity
 
     float HP = 100f;
 
-    Queue<Vector3> posQ = new Queue<Vector3>();
-    Queue<float> HPQ = new Queue<float>();
+    Queue posQ = new Queue();
+    Queue HPQ = new Queue();
     
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,10 @@ public class EnemyExample : TemporalEntity
         posQ.Enqueue(transform.position);
     }
 
-    protected override List<Queue<T>> ReversePositionQueue(float amount){
-        return new List<Queue<T>>{posQ, HPQ};
+    protected override List<Queue> ReversePositionQueue(float amount){
+        List<Queue> QList = new List<Queue>();
+        QList.Add(posQ);
+        QList.Add(HPQ);
+        return QList;
     }
 }
