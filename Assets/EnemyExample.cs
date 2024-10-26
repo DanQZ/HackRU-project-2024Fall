@@ -6,7 +6,7 @@ public class EnemyExample : TemporalEntity
 {
     float speed = 2f;
 
-    float HP = 100f
+    float HP = 100f;
 
     Queue<Vector3> posQ = new Queue<Vector3>();
     Queue<float> HPQ = new Queue<float>();
