@@ -22,16 +22,28 @@ public class EnemyExample : TemporalEntity
     void Update()
     {
         transform.position += Vector3.right * Time.deltaTime * speed;
+        if(Input.GetKeyDown(KeyCode.Space)){
+            ReverseMyTime(2f);
+        }
     }
 
     protected override void AddToQueues(){
         posQ.Enqueue(transform.position);
     }
 
-    protected override List<Queue> ReversePositionQueue(float amount){
+    public override void ReverseMyTime(float seconds){
+        // make a new list of queues
         List<Queue> QList = new List<Queue>();
+
+        // add relevant queues to list
         QList.Add(posQ);
         QList.Add(HPQ);
-        return QList;
+
+        // get the values of the queues at the time x seconds ago
+        QList = GetSecondsAgo(seconds, QList);
+        
+        // update the position and HP
+        HP = (float)HPQ.Peek();
+        transform.position = (Vector3)posQ.Peek();
     }
 }
