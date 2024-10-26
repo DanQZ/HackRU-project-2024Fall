@@ -18,9 +18,10 @@ public class TemporalEntityManager : MonoBehaviour
         }
     }
 
-    private static float maxTrackingTime = 5f;
+    private static float maxTrackingTime = 10f;
     private List<TemporalEntity> temporalEntities = new List<TemporalEntity>();
     
+    // have all the temporal entities update their queues per update
     void Update()
     {
         foreach(TemporalEntity entity in temporalEntities)
@@ -37,5 +38,12 @@ public class TemporalEntityManager : MonoBehaviour
     public void RemoveTemporalEntity(TemporalEntity entity)
     {
         temporalEntities.Remove(entity);
+    }
+
+    public void ReverseTime(float amount){
+        foreach(TemporalEntity entity in temporalEntities)
+        {
+            entity.ReverseMyTime(amount);
+        }
     }
 }

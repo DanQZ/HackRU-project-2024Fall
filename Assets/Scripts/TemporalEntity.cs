@@ -7,7 +7,6 @@ public abstract class TemporalEntity : MonoBehaviour
 {
     // static variables are shared across ball instances of the class
     // all temporal entities will share the same max tracking time and start time for the tracking, because we want to be able to 
-    private static float maxTrackingTime = 5f;
     private static float posQStartTime = 0f;
 
     // this queue stores the time at which each new queue's element was added, since all 
@@ -29,15 +28,25 @@ public abstract class TemporalEntity : MonoBehaviour
         AddToQueues();
     }
 
-    // adds all the necessary information to the queues
+    protected List<Queue> GetSecondsAgo(float secondsAgo, List<Queue> allQs){
+        float currentTime = Time.time;
+        float targetTime = currentTime - secondsAgo;
+        Queue<float> timeQCopy = new Queue<float>(timeQ); 
+        
+        while(timeQCopy.Count > 0 && timeQCopy.Peek() < targetTime){
+            timeQCopy.Dequeue();
+            foreach(Queue q in allQs){
+                q.Dequeue();
 
-    public void ReverseTime(float amount){
-        if(amount > maxTrackingTime){
-            amount = maxTrackingTime;
+                // if go back before it was created
+                if(q.Count == 0){
+                    break;
+                }
+            }
         }
-        ReversePositionQueue(amount);
+        return allQs;
     }
     
     protected abstract void AddToQueues();
-    protected abstract List<Queue> ReversePositionQueue(float amount);
+    public abstract void ReverseMyTime(float amount);
 }
