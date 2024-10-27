@@ -49,11 +49,15 @@ public class TemporalEntityManager : MonoBehaviour
 
     public void ReverseTime()
     {
-        if (Time.time < nextAvailableTimeReverseTime) { return; }
+        if (!CanReverseTime()) { return; }
         foreach (TemporalEntity entity in temporalEntities)
         {
             entity.ReverseTime();
         }
         nextAvailableTimeReverseTime = Time.time + maxTrackingTime;
+    }
+
+    public bool CanReverseTime(){
+        return Time.time > nextAvailableTimeReverseTime;
     }
 }

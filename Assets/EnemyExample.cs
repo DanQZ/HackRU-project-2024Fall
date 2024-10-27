@@ -9,7 +9,7 @@ public class EnemyExample : TemporalEntity
 
     float HP = 100f;
 
-    [SerializeField] GameObject graphic2;
+    [SerializeField] GameObject graphic2; // for debugging 
     [SerializeField] private Queue<Vector3> posQ = new Queue<Vector3>();
     private Queue<float> HPQ = new Queue<float>();
 
@@ -18,8 +18,6 @@ public class EnemyExample : TemporalEntity
     {
         transform.position += Vector3.right * Time.deltaTime * speed;
         graphic2.transform.position = posQ.Peek();
-    }
-    protected override void InitQueues(){
     }
 
     // add the current position and HP to the queues

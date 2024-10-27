@@ -39,8 +39,12 @@ public class PlayerController : MonoBehaviour
     }
 
     private void AttemptReverseTime(){
-        if(Time.time > TemporalEntityManager.nextAvailableTimeReverseTime){
+        if(TemporalEntityManager.instance.CanReverseTime()){
             TemporalEntityManager.instance.ReverseTime();
+            Debug.Log("Reversing time");
+        }
+        else{
+            Debug.Log("Cannot reverse time yet");
         }
     }
 }

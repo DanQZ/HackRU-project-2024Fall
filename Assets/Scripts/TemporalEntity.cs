@@ -55,7 +55,6 @@ public abstract class TemporalEntity : MonoBehaviour
         timeQ.Clear();
     }
     
-    protected abstract void InitQueues();
     protected void FillQueueWithInfo<T>(Queue<T> q, T info){
         Queue<float> timeQCopy = new Queue<float>(timeQ);
         while(timeQCopy.Count > 0){
