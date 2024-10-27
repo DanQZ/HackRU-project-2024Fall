@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        float damageAmount = -1f * Mathf.Abs(amount);
+        float damageAmount = Mathf.Abs(amount);
         HP -= damageAmount;
         if(HP < 0f)
         {
@@ -58,17 +58,21 @@ public class Player : MonoBehaviour
     
     public event Action<float> OnHPChange;
 
-    public void OnTrigger2DEnter(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Triggered player collider 2d");
         string tag = other.tag;
         switch(tag)
         {
             case "catfood":
                 ChangeFatness(1f);
                 break;
-            case "bullet":
-                TakeDamage(10f);
-                break;
+        }
+
+        if(other.gameObject.GetComponent<Bullet>() != null)
+        {
+            TakeDamage(10f);
+            Destroy(other.gameObject);
         }
     }
 }
