@@ -1,5 +1,9 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+# Ignore files I specifically don't want to track
 .vscode/
+Assets\KareemsTests
+
 
