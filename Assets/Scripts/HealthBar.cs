@@ -10,7 +10,15 @@ public class HealthBar : MonoBehaviour
     private float barWidthDefault = 1f;
     private float barHeightDefault = 0.1f;
 
-    public void UpdateHealthBar()
+    void Start(){
+        playerRef.OnHPChange += UpdateHealthBar;
+    }
+
+    // event handler
+    private void UpdateHealthBar(float any){
+        UpdateHealthBar();
+    }
+    private void UpdateHealthBar()
     {
         float barWidth = barWidthDefault * (currentHP / maxHP);
         transform.localScale = new Vector3(barWidth, barHeightDefault, 1f);
