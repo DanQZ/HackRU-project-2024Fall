@@ -30,6 +30,11 @@ public class PlayerController : MonoBehaviour
         float moveMagnitude =  playerRef.speed * Time.deltaTime;
         Vector3 moveVector = moveDirection * moveMagnitude;
         playerRef.transform.position += moveVector;
+
+        if (moveDirection != Vector3.zero){
+            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x)*Mathf.Rad2Deg;
+            playerRef.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
     }
 
     private void Powers(){
