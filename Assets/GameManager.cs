@@ -4,17 +4,36 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-    public GameObject player;
-    // Start is called before the first frame update
-    void Start()
+    //singleton
+    public static GameManager instance;
+    void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+        SpawnPlayer();
     }
+
+    [SerializeField] GameObject playerPrefab;
+    public GameObject playerInstance;
+
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void SpawnPlayer(){
+        if(playerInstance != null){
+            Destroy(playerInstance);
+        }
+        playerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        // do somthing here
     }
 }

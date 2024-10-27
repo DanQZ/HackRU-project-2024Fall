@@ -5,18 +5,18 @@ using UnityEngine;
 public class BasicEnemy : MonoBehaviour
 {
     float timer = 0;
-    float interval = 1.5f;
+    protected float interval = 1.5f;
 
-    private Transform player;
+    protected Transform player => GameManager.instance.playerInstance.transform;
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         if (player == null) {
             return;
@@ -32,7 +32,7 @@ public class BasicEnemy : MonoBehaviour
         AttemptToShoot();
     }
 
-    private void AttemptToShoot () {
+    protected void AttemptToShoot () {
         //check if the time is greater than the interval
         if(Time.time > timer){
             //turn to face the player
@@ -46,7 +46,7 @@ public class BasicEnemy : MonoBehaviour
     }
 
     [SerializeField] GameObject bulletPrefab;
-    private void ShootAtPlayer () {
+    protected void ShootAtPlayer () {
         //Create bullet object
         GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation) as GameObject;
         bullet.transform.up = player.position - transform.position;
