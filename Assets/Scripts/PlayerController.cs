@@ -8,26 +8,43 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Movement();
+        Powers();
+    }
+
+    private void Movement(){
         Vector3 moveDirection = Vector3.zero;
-        if(Input.GetKey(KeyCode.W))
-        {
+        if(Input.GetKey(KeyCode.W)){
             moveDirection += Vector3.up;
         }
-        if(Input.GetKey(KeyCode.A))
-        {
+        if(Input.GetKey(KeyCode.A)){
             moveDirection -= Vector3.right;
         }
-        if(Input.GetKey(KeyCode.S))
-        {
+        if(Input.GetKey(KeyCode.S)){
             moveDirection -= Vector3.up;
         }
-        if(Input.GetKey(KeyCode.D))
-        {
+        if(Input.GetKey(KeyCode.D)){
             moveDirection += Vector3.right;
         }
         moveDirection = moveDirection.normalized;
         float moveMagnitude =  playerRef.speed * Time.deltaTime;
         Vector3 moveVector = moveDirection * moveMagnitude;
         playerRef.transform.position += moveVector;
+    }
+
+    private void Powers(){
+        if(Input.GetKeyDown(KeyCode.Space)){
+            AttemptReverseTime();
+        }
+    }
+
+    private void AttemptReverseTime(){
+        if(TemporalEntityManager.instance.CanReverseTime()){
+            TemporalEntityManager.instance.ReverseTime();
+            Debug.Log("Reversing time");
+        }
+        else{
+            Debug.Log("Cannot reverse time yet");
+        }
     }
 }

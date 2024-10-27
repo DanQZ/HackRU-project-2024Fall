@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TemporalEntityManager : MonoBehaviour
-{   
+{
     //singleton 
     public static TemporalEntityManager instance;
     void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -18,13 +18,20 @@ public class TemporalEntityManager : MonoBehaviour
         }
     }
 
-    private static float maxTrackingTime = 10f;
+    public static float maxTrackingTime { get; private set; } = 0.5f;
+    public static float nextAvailableTimeReverseTime { get; set; } = 0f;
     private List<TemporalEntity> temporalEntities = new List<TemporalEntity>();
-    
+
+
+    void Start()
+    {
+
+    }
+
     // have all the temporal entities update their queues per update
     void Update()
     {
-        foreach(TemporalEntity entity in temporalEntities)
+        foreach (TemporalEntity entity in temporalEntities)
         {
             entity.UpdateQueue();
         }
@@ -40,10 +47,17 @@ public class TemporalEntityManager : MonoBehaviour
         temporalEntities.Remove(entity);
     }
 
-    public void ReverseTime(float amount){
-        foreach(TemporalEntity entity in temporalEntities)
+    public void ReverseTime()
+    {
+        if (!CanReverseTime()) { return; }
+        foreach (TemporalEntity entity in temporalEntities)
         {
-            entity.ReverseMyTime(amount);
+            entity.ReverseTime();
         }
+        nextAvailableTimeReverseTime = Time.time + maxTrackingTime;
+    }
+
+    public bool CanReverseTime(){
+        return Time.time > nextAvailableTimeReverseTime;
     }
 }

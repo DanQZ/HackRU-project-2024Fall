@@ -5,9 +5,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //singleton 
+    public static Player instance;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     private float fatness = 0f;
     private float fatnessSlowingMitigator = 5f; // the amount of fatness required to reduce the speed by half
     public float speed { get; private set; } = 5f; 
+    public float sizeExponent { get; private set; } = 1.1f;
 
     public float maxHP { get; private set; } = 100f;
     public float HP { get; private set; } = 100f;
@@ -21,25 +36,39 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        float damage = -1f * Mathf.Abs(amount);
-        HP -= damage;
-        if(HP < 0)
+        float damageAmount = -1f * Mathf.Abs(amount);
+        HP -= damageAmount;
+        if(HP < 0f)
         {
-            HP = 0;
+            HP = 0f;
         }
-        OnHPChange?.Invoke(damage);
+        OnHPChange?.Invoke(damageAmount);
     }
 
     public void TakeHealing(float amount)
     {
-        float healing = Mathf.Abs(amount);
-        HP += healing;
+        float healingAmount = Mathf.Abs(amount);
+        HP += healingAmount;
         if(HP > maxHP)
         {
             HP = maxHP;
         }
-        OnHPChange?.Invoke(healing);
+        OnHPChange?.Invoke(healingAmount);
     }
     
     public event Action<float> OnHPChange;
+
+    public void OnTrigger2DEnter(Collider2D other)
+    {
+        string tag = other.tag;
+        switch(tag)
+        {
+            case "catfood":
+                ChangeFatness(1f);
+                break;
+            case "bullet":
+                TakeDamage(10f);
+                break;
+        }
+    }
 }
