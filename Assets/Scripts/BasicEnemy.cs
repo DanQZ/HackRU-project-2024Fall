@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicEnemy : MonoBehaviour
+public class BasicEnemy : TemporalEntity
 {
-    float timer = 0;
+    protected float timer = 0;
     protected float interval = 1.5f;
+    protected float inaccuracy = 10f;
 
     protected Transform player => GameManager.instance.playerInstance.transform;
-
     // Start is called before the first frame update
     protected void Start()
     {
-        
+        base.Start();
     }
+
 
     // Update is called once per frame
     protected void Update()
@@ -21,14 +22,7 @@ public class BasicEnemy : MonoBehaviour
         if (player == null) {
             return;
         }
-        //Get the direction to the player
-        Vector2 direction = (player.position - transform.position).normalized;
-
-        //Get the angle to the player
-        float angle = Mathf.Atan2(direction.y, direction.x)*Mathf.Rad2Deg;
-
-        //Set the enemy's rotation to face the player
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        transform.right = player.position - transform.position;
         AttemptToShoot();
     }
 
@@ -50,5 +44,28 @@ public class BasicEnemy : MonoBehaviour
         //Create bullet object
         GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation) as GameObject;
         bullet.transform.up = player.position - transform.position;
+
+        //apply inaccuracy 
+        bullet.transform.Rotate(0, 0, Random.Range(-inaccuracy, inaccuracy));
+    }
+
+    // add the current state of the entity to the queues
+    protected override void AddToQueues(){
+
+    }
+
+    // remove the oldest element from the queues
+    protected override void DequeueQueues(){
+
+    }
+    
+    // set values to the state they were from GetSecondsAgo
+    public override void SetReversedTimeValues(){
+
+    }
+
+    // clear all the queues
+    protected override void CullQueues(){
+
     }
 }

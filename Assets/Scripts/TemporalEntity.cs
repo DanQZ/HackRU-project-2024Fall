@@ -10,20 +10,20 @@ public abstract class TemporalEntity : MonoBehaviour
 
     // this queue stores the time at which each new queue's element was added, since all 
     // this is used to determine how far back in time we remove elements from the queue
-    private Queue<float> timeQ = new Queue<float>();
+    protected Queue<float> timeQ = new Queue<float>();
 
-    private float lastReversedTime;
-    private float timeToCullQs;
-    void Start()
+    protected float lastReversedTime;
+    protected float timeToCullQs;
+    protected void Start()
     {
         lastReversedTime = Time.time;
         TemporalEntityManager.instance.AddTemporalEntity(this);
-        //InitQueues();
     }
 
-    void OnDestroy()
+    protected void OnDestroy()
     {
         TemporalEntityManager.instance.RemoveTemporalEntity(this);
+
     }
 
     // UpdateQueue is called by the TemporalEntityManager every frame
@@ -55,24 +55,18 @@ public abstract class TemporalEntity : MonoBehaviour
         timeQ.Clear();
     }
     
-    protected void FillQueueWithInfo<T>(Queue<T> q, T info){
-        Queue<float> timeQCopy = new Queue<float>(timeQ);
-        while(timeQCopy.Count > 0){
-            timeQCopy.Dequeue();
-            q.Enqueue(info);
-        }
-    }
-    // add the current state of the entity to the queues
-    protected abstract void AddToQueues();
-
-    // remove the oldest element from the queues
-    protected abstract void DequeueQueues();
     public void ReverseTime(){
         lastReversedTime = Time.time;
         timeQ.Clear();
         SetReversedTimeValues();
         CullQueues();
     }
+
+    // add the current state of the entity to the queues
+    protected abstract void AddToQueues();
+
+    // remove the oldest element from the queues
+    protected abstract void DequeueQueues();
 
     // set values to the state they were from GetSecondsAgo
     public abstract void SetReversedTimeValues();

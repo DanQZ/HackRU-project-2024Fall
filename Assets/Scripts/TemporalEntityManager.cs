@@ -18,8 +18,8 @@ public class TemporalEntityManager : MonoBehaviour
         }
     }
 
-    public static float maxTrackingTime { get; private set; } = 0.5f;
-    public static float nextAvailableTimeReverseTime { get; set; } = 0f;
+    public static float maxTrackingTime { get; private set; } = 1f;
+    public static float nextAvailableTimeReverseTime { get; set; } = maxTrackingTime;
     private List<TemporalEntity> temporalEntities = new List<TemporalEntity>();
 
 

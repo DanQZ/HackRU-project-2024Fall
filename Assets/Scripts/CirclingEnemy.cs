@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class CirclingEnemy : BasicEnemy
 {
-    private float moveSpeed = 2f;
+    [SerializeField] private Transform previousGraphic;
+    private float moveSpeed = 1f;
     private float targetDistance = 5f;
-    void Start(){
-        interval = 0.2f;
+    
+    protected void Start(){
+        base.Start();
+        interval = 0.5f;
     }
-    void Update()
+    protected void Update()
     {
+        base.Update();
         AttemptToShoot();
         Movement();
+        previousGraphic.position = posQ.Peek();
     }
 
-    void Movement(){
+    private void Movement(){
         Vector3 moveVector = new Vector3( // go at
             player.position.x - transform.position.x,
             player.position.y - transform.position.y,
@@ -41,5 +46,29 @@ public class CirclingEnemy : BasicEnemy
         }
 
         transform.position += moveVectorCircle * Time.deltaTime * moveSpeed;
+    }
+    
+    Queue<Vector3> posQ = new Queue<Vector3>();
+    // add the current state of the entity to the queues
+    protected override void AddToQueues(){
+        Debug.Log($"Enqueueing {transform.position}");
+        posQ.Enqueue(transform.position);
+    }
+
+    // remove the oldest element from the queues
+    protected override void DequeueQueues(){
+        posQ.Dequeue();
+    }
+    
+    // set values to the state they were from GetSecondsAgo
+    public override void SetReversedTimeValues(){
+
+        posQ = GetReversedTimeValue<Vector3>(posQ);
+        transform.position = posQ.Peek();
+    }
+
+    // clear all the queues
+    protected override void CullQueues(){
+        posQ.Clear();
     }
 }

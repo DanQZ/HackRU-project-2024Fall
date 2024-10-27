@@ -11,12 +11,11 @@ public class Bullet : TemporalEntity
     public float speed { get; set; } = 10f;
 
 
-    Queue<Vector3> positionQueue = new Queue<Vector3>();
 
     // Start is called before the first frame update
     void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame
@@ -29,10 +28,12 @@ public class Bullet : TemporalEntity
         Destroy(gameObject, 8f);
     }
 
+    Queue<Vector3> positionQueue = new Queue<Vector3>();
 
-        public override void SetReversedTimeValues()
+    public override void SetReversedTimeValues()
     {
-        throw new System.NotImplementedException();
+        positionQueue = GetReversedTimeValue<Vector3>(positionQueue);
+        transform.position = positionQueue.Peek();
     }
 
     protected override void AddToQueues()
@@ -42,12 +43,12 @@ public class Bullet : TemporalEntity
 
     protected override void CullQueues()
     {
-        throw new System.NotImplementedException();
+        positionQueue.Clear();
     }
 
     protected override void DequeueQueues()
     {
-        throw new System.NotImplementedException();
+        positionQueue.Dequeue();
     }
 
 
