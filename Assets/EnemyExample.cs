@@ -9,41 +9,45 @@ public class EnemyExample : TemporalEntity
 
     float HP = 100f;
 
-    Queue posQ = new Queue();
-    Queue HPQ = new Queue();
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] GameObject graphic2;
+    [SerializeField] private Queue<Vector3> posQ = new Queue<Vector3>();
+    private Queue<float> HPQ = new Queue<float>();
 
     // Update is called once per frame
     void Update()
     {
         transform.position += Vector3.right * Time.deltaTime * speed;
-        if(Input.GetKeyDown(KeyCode.Space)){
-            ReverseMyTime(2f);
-        }
+        graphic2.transform.position = posQ.Peek();
+    }
+    protected override void InitQueues(){
     }
 
+    // add the current position and HP to the queues
     protected override void AddToQueues(){
+        Debug.Log($"Enqueueing {transform.position}");
         posQ.Enqueue(transform.position);
+        HPQ.Enqueue(HP);
     }
 
-    public override void ReverseMyTime(float seconds){
-        // make a new list of queues
-        List<Queue> QList = new List<Queue>();
+    // remove the oldest element from each queue
+    protected override void DequeueQueues(){
+        posQ.Dequeue();
+        HPQ.Dequeue();
+    }
 
-        // add relevant queues to list
-        QList.Add(posQ);
-        QList.Add(HPQ);
+    // just clear all the queues
+    protected override void CullQueues(){
+        posQ.Clear();
+        HPQ.Clear();
+    }
 
-        // get the values of the queues at the time x seconds ago
-        QList = GetSecondsAgo(seconds, QList);
-        
-        // update the position and HP
-        HP = (float)HPQ.Peek();
-        transform.position = (Vector3)posQ.Peek();
+    // set values to the state they were from GetReversedTimeValue<T>(Queue<T> q)
+    // use peek
+    public override void SetReversedTimeValues(){
+        posQ = GetReversedTimeValue<Vector3>(posQ);
+        transform.position = posQ.Peek();
+
+        HPQ = GetReversedTimeValue<float>(HPQ);
+        HP = HPQ.Peek();
     }
 }
